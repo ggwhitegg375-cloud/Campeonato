@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101411">
+  <title>Campeonato da Galera</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101411;
+      --panel: #171d19;
+      --panel-2: #1d2520;
+      --line: rgba(238, 242, 229, .1);
+      --text: #f2f3eb;
+      --muted: #a2aca2;
+      --lime: #c5f36b;
+      --lime-dark: #a5d64f;
+      --orange: #f0a36a;
+      --radius: 22px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; color: var(--text); background: var(--bg); }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .page-shell { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 25px 0; border-bottom: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: 12px; color: var(--text); text-decoration: none; font-size: 13px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+    .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; color: #17200f; background: var(--lime); border-radius: 12px; font-size: 19px; transform: rotate(-5deg); }
+    .brand-mark span { transform: rotate(5deg); }
+    .nav { display: flex; align-items: center; gap: 7px; }
+    .nav-button { border: 0; color: var(--muted); background: transparent; padding: 10px 14px; border-radius: 999px; font-size: 13px; font-weight: 650; transition: .2s ease; }
+    .nav-button:hover, .nav-button.active { color: var(--text); background: var(--panel-2); }
+    .nav-button.active { box-shadow: inset 0 0 0 1px var(--line); }
+    .nav-button .nav-count { display: inline-grid; place-items: center; min-width: 21px; height: 21px; margin-left: 6px; padding: 0 6px; border-radius: 999px; color: #202718; background: var(--lime); font-size: 11px; }
+    main { padding: 44px 0 80px; }
+    .view[hidden] { display: none; }
+    .hero { position: relative; overflow: hidden; min-height: 364px; display: flex; align-items: center; padding: clamp(30px, 6vw, 68px); border: 1px solid rgba(255,255,255,.08); border-radius: 30px; background: radial-gradient(ellipse at 82% 17%, rgba(197,243,107,.16), transparent 30%), radial-gradient(ellipse at 90% 98%, rgba(240,163,106,.12), transparent 35%), linear-gradient(130deg, #1d2720, #151a17 63%); }
+    .hero::after { content: ""; position: absolute; width: 330px; height: 330px; right: 4%; top: 13%; border: 1px solid rgba(197,243,107,.12); border-radius: 50%; box-shadow: 0 0 0 35px rgba(197,243,107,.025), 0 0 0 70px rgba(197,243,107,.02); pointer-events: none; }
+    .hero-content { position: relative; z-index: 1; max-width: 660px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; margin: 0 0 20px; color: var(--lime); font-size: 11px; line-height: 1.4; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 14px rgba(197,243,107,.7); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 650px; margin-bottom: 17px; font-size: clamp(42px, 7vw, 76px); line-height: .99; letter-spacing: -.065em; font-weight: 760; }
+    h1 em { color: var(--lime); font-style: normal; }
+    .hero-copy { max-width: 495px; margin-bottom: 28px; color: #b6c0b6; font-size: 16px; line-height: 1.7; }
+    .button-primary { display: inline-flex; align-items: center; gap: 11px; border: 0; padding: 14px 19px; border-radius: 999px; color: #1d2615; background: var(--lime); font-size: 13px; font-weight: 800; transition: transform .2s ease, background .2s ease; }
+    .button-primary:hover { transform: translateY(-2px); background: #d5ff83; }
+    .button-primary span { font-size: 17px; }
+    .hero-side-note { position: absolute; z-index: 1; right: 8%; bottom: 14%; display: flex; flex-direction: column; gap: 5px; color: var(--muted); font-size: 10px; letter-spacing: .13em; text-transform: uppercase; }
+    .hero-side-note strong { color: var(--text); font-size: 14px; letter-spacing: .03em; }
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+    .stat-card { min-height: 126px; padding: 22px 24px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); }
+    .stat-top { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 12px; }
+    .stat-icon { color: var(--lime); font-size: 17px; }
+    .stat-value { display: flex; align-items: baseline; gap: 7px; margin-top: 13px; font-size: 31px; font-weight: 750; letter-spacing: -.045em; }
+    .stat-value small { color: var(--muted); font-size: 13px; font-weight: 550; letter-spacing: 0; }
+    .schedule-card { padding: clamp(22px, 4vw, 36px); border: 1px solid var(--line); border-radius: 25px; background: radial-gradient(ellipse at 92% 0%, rgba(197,243,107,.1), transparent 35%), linear-gradient(135deg, #1b241d, #151a17); }
+    .schedule-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 30px; }
+    .schedule-heading .section-kicker { margin-bottom: 10px !important; }
+    .schedule-heading h3 { margin: 0; font-size: clamp(24px, 4vw, 34px); letter-spacing: -.04em; }
+    .schedule-details { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+    .schedule-detail { min-height: 108px; padding: 18px; border: 1px solid var(--line); border-radius: 17px; background: rgba(16,20,17,.55); }
+    .schedule-detail span { display: block; margin-bottom: 13px; color: var(--muted); font-size: 11px; }
+    .schedule-detail strong { display: block; color: var(--text); font-size: clamp(15px, 2vw, 20px); font-weight: 750; text-transform: capitalize; }
+    .matchup-display { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 14px; margin-bottom: 23px; }
+    .match-team { min-width: 0; padding: 17px; border: 1px solid var(--line); border-radius: 17px; background: rgba(16,20,17,.55); }
+    .match-team-title { margin: 0 0 12px; color: var(--lime); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .match-team-players { display: grid; gap: 10px; }
+    .match-player { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .match-player .player-name { margin: 0; }
+    .versus-badge { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid rgba(197,243,107,.22); border-radius: 50%; color: var(--lime); background: rgba(197,243,107,.07); font-size: 12px; font-weight: 900; }
+    .matchup-empty { grid-column: 1 / -1; padding: 24px; border: 1px dashed rgba(238,242,229,.17); border-radius: 17px; color: var(--muted); text-align: center; font-size: 13px; }
+    .schedule-footnote { margin: 19px 0 0; color: var(--muted); font-size: 12px; }
+    .schedule-footnote strong { color: var(--lime); }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin: 4px 0 26px; }
+    .section-head h2 { margin: 0 0 8px; font-size: clamp(32px, 5vw, 48px); line-height: 1; letter-spacing: -.055em; }
+    .section-head p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
+    .section-kicker { margin-bottom: 13px !important; color: var(--lime) !important; font-size: 10px !important; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+    .list-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 17px; }
+    .capacity { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .capacity strong { color: var(--text); }
+    .search-wrap { position: relative; width: min(320px, 100%); }
+    .search-wrap span { position: absolute; top: 50%; left: 15px; color: var(--muted); transform: translateY(-50%); pointer-events: none; }
+    .search { width: 100%; border: 1px solid var(--line); outline: none; padding: 12px 15px 12px 42px; border-radius: 999px; color: var(--text); background: var(--panel); font-size: 13px; transition: border-color .2s ease, box-shadow .2s ease; }
+    .search::placeholder { color: #7f8a80; }
+    .search:focus { border-color: rgba(197,243,107,.55); box-shadow: 0 0 0 3px rgba(197,243,107,.08); }
+    .players-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+    .team-card { position: relative; min-width: 0; padding: 15px; border: 1px solid var(--line); border-radius: 18px; background: var(--panel); transition: transform .2s ease, border-color .2s ease; }
+    .team-card:hover { transform: translateY(-2px); border-color: rgba(197,243,107,.35); }
+    .bounty-tooltip { position: absolute; z-index: 3; top: -11px; right: 13px; padding: 8px 11px; border: 1px solid rgba(197,243,107,.35); border-radius: 999px; color: #1d2615; background: var(--lime); box-shadow: 0 8px 24px rgba(0,0,0,.3); font-size: 11px; font-weight: 850; opacity: 0; pointer-events: none; transform: translateY(5px); transition: .18s ease; visibility: hidden; white-space: nowrap; }
+    .team-card:hover .bounty-tooltip, .team-card:focus .bounty-tooltip, .team-card:focus-within .bounty-tooltip { opacity: 1; transform: translateY(0); visibility: visible; }
+    .team-heading { display: flex; justify-content: space-between; gap: 12px; margin: 0 0 13px; color: var(--lime); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .team-heading span:last-child { color: var(--muted); font-weight: 600; letter-spacing: .02em; text-transform: none; }
+    .team-members { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .team-member { min-width: 0; display: flex; align-items: center; gap: 9px; padding: 9px; border: 1px solid rgba(238,242,229,.07); border-radius: 14px; background: var(--panel-2); }
+    .avatar { position: relative; flex: 0 0 43px; width: 43px; height: 43px; display: grid; place-items: center; overflow: hidden; border: 1px solid rgba(197,243,107,.2); border-radius: 13px; color: var(--lime); background: linear-gradient(145deg, #34432c, #212a22); font-size: 13px; font-weight: 800; text-transform: uppercase; }
+    .avatar span, .avatar img { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .avatar span { display: grid; place-items: center; }
+    .avatar img { object-fit: cover; }
+    .player-info { min-width: 0; }
+    .player-name { overflow: hidden; margin: 0 0 5px; color: var(--text); font-size: 13px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+    .player-label { margin: 0; color: var(--muted); font-size: 10px; }
+    .empty-state { display: grid; justify-items: center; padding: 62px 24px; border: 1px dashed rgba(238,242,229,.17); border-radius: var(--radius); background: rgba(23,29,25,.58); text-align: center; }
+    .empty-icon { display: grid; place-items: center; width: 60px; height: 60px; margin-bottom: 18px; border: 1px solid rgba(197,243,107,.25); border-radius: 20px; color: var(--lime); background: rgba(197,243,107,.08); font-size: 26px; }
+    .empty-state h3 { margin-bottom: 8px; font-size: 19px; letter-spacing: -.02em; }
+    .empty-state p { max-width: 410px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .guide-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 15px; }
+    .guide-card { padding: 27px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); }
+    .guide-card h3 { margin-bottom: 9px; font-size: 18px; letter-spacing: -.025em; }
+    .guide-card > p { margin-bottom: 19px; color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .steps { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; counter-reset: steps; }
+    .steps li { position: relative; min-height: 39px; padding-left: 48px; color: #c2cbc1; font-size: 13px; line-height: 1.6; counter-increment: steps; }
+    .steps li::before { content: counter(steps, decimal-leading-zero); position: absolute; top: 0; left: 0; display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 11px; color: var(--lime); background: var(--panel-2); font-size: 10px; font-weight: 800; }
+    code { color: var(--lime); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .94em; }
+    pre { overflow: auto; margin: 0; padding: 17px; border: 1px solid var(--line); border-radius: 14px; color: #dbe6d4; background: #101511; font-size: 12px; line-height: 1.7; }
+    .note { display: flex; gap: 11px; margin-top: 15px; padding: 14px 15px; border: 1px solid rgba(197,243,107,.15); border-radius: 14px; color: #bac5b7; background: rgba(197,243,107,.055); font-size: 12px; line-height: 1.6; }
+    .note b { color: var(--lime); }
+    footer { display: flex; justify-content: space-between; gap: 20px; padding: 23px 0 30px; border-top: 1px solid var(--line); color: #758077; font-size: 11px; }
+    footer strong { color: #a5afa5; font-weight: 650; }
+    @media (max-width: 850px) { .players-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } .hero-side-note { right: 6%; bottom: 9%; } }
+    @media (max-width: 620px) {
+      .page-shell { width: min(100% - 28px, 500px); }
+      .topbar { align-items: flex-start; flex-direction: column; gap: 15px; padding: 19px 0 14px; }
+      .nav { width: 100%; justify-content: flex-start; flex-wrap: wrap; gap: 4px; }
+      .nav-button { padding: 9px 11px; font-size: 12px; }
+      main { padding: 25px 0 50px; }
+      .hero { min-height: 390px; align-items: flex-start; padding: 34px 25px; }
+      .hero::after { width: 250px; height: 250px; top: auto; right: -22%; bottom: 4%; }
+      h1 { font-size: clamp(46px, 13vw, 66px); }
+      .hero-copy { max-width: 330px; font-size: 14px; }
+      .hero-side-note { right: 25px; bottom: 19px; font-size: 9px; }
+      .hero-side-note strong { font-size: 12px; }
+      .stats-row { grid-template-columns: 1fr; gap: 9px; }
+      .stat-card { display: flex; align-items: center; justify-content: space-between; min-height: auto; padding: 15px 18px; }
+      .stat-value { margin: 0; font-size: 25px; }
+      .section-head { align-items: flex-start; flex-direction: column; margin-bottom: 19px; }
+      .schedule-details { grid-template-columns: 1fr; gap: 9px; }
+      .schedule-detail { min-height: auto; padding: 15px 17px; }
+      .schedule-detail span { margin-bottom: 6px; }
+      .matchup-display { grid-template-columns: 1fr; gap: 9px; }
+      .versus-badge { width: 38px; height: 38px; margin: 0 auto; }
+      .schedule-inputs { grid-template-columns: 1fr; gap: 0; }
+      .list-toolbar { align-items: stretch; flex-direction: column-reverse; }
+      .search-wrap { width: 100%; }
+      .capacity { align-self: flex-end; }
+      .players-grid { grid-template-columns: 1fr; gap: 9px; }
+      footer { flex-direction: column; gap: 7px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="#inicio" aria-label="Página inicial do campeonato">
+        <span class="brand-mark" aria-hidden="true"><span>✦</span></span>
+        <span id="brand-name">Campeonato da Galera</span>
+      </a>
+      <nav class="nav" aria-label="Navegação principal">
+        <button class="nav-button active" type="button" data-view="inicio">Início</button>
+        <button class="nav-button" type="button" data-view="inscritos">Duplas <span class="nav-count" id="nav-count">0</span></button>
+        <button class="nav-button" type="button" data-view="agenda">Horários</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="view" id="view-inicio">
+        <div class="hero">
+          <div class="hero-content">
+            <p class="eyebrow" id="hero-eyebrow">Temporada 2026 · Inscrições abertas</p>
+            <h1>A disputa começa <em>aqui.</em></h1>
+            <p class="hero-copy">Acompanhe as duplas inscritas e os próximos confrontos do campeonato.</p>
+            <button class="button-primary" type="button" data-go="inscritos">Ver duplas inscritas <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="hero-side-note"><span>Uma vaga na história</span><strong>Você está pronto?</strong></div>
+        </div>
+
+        <div class="stats-row" aria-label="Resumo das inscrições">
+          <article class="stat-card"><div class="stat-top"><span>Jogadores inscritos</span><span class="stat-icon" aria-hidden="true">◉</span></div><div class="stat-value"><span id="home-count">0</span><small>de 100 vagas</small></div></article>
+          <article class="stat-card"><div class="stat-top"><span>Vagas disponíveis</span><span class="stat-icon" aria-hidden="true">＋</span></div><div class="stat-value"><span id="home-open">100</span><small>para jogadores</small></div></article>
+          <article class="stat-card"><div class="stat-top"><span>Formato</span><span class="stat-icon" aria-hidden="true">⌁</span></div><div class="stat-value"><span>Duplas 2x2</span><small>até 50 duplas</small></div></article>
+        </div>
+      </section>
+
+      <section class="view" id="view-inscritos" hidden>
+        <div class="section-head">
+          <div><p class="section-kicker">A comunidade em campo</p><h2>Duplas inscritas</h2><p>Confira os jogadores que vão competir juntos.</p></div>
+        </div>
+        <div class="list-toolbar">
+          <div class="search-wrap"><span aria-hidden="true">⌕</span><input class="search" id="search" type="search" placeholder="Buscar jogador..." aria-label="Buscar jogador inscrito"></div>
+          <div class="capacity"><strong id="list-count">0</strong> / 100 jogadores · <span id="pair-count">0</span> duplas</div>
+        </div>
+        <div class="players-grid" id="players-grid"></div>
+        <div class="empty-state" id="empty-state" hidden>
+          <div class="empty-icon" aria-hidden="true">♙</div>
+          <h3 id="empty-title">As inscrições estão começando</h3>
+          <p id="empty-copy">Adicione os nomes e as fotos no bloco DUPLAS — EDITE AQUI do código. Eles aparecerão aqui automaticamente.</p>
+        </div>
+      </section>
+
+      <section class="view" id="view-agenda" hidden>
+        <div class="section-head">
+          <div><p class="section-kicker">Organização do campeonato</p><h2>Horários do PvP</h2><p>Confira quais duplas vão se enfrentar, em que dia e horário.</p></div>
+        </div>
+        <article class="schedule-card">
+          <div class="schedule-heading"><div><p class="section-kicker">Próximo confronto</p><h3>Duplas selecionadas</h3></div></div>
+          <div class="matchup-display" id="agenda-matchup"><div class="matchup-empty">As duplas do confronto serão mostradas aqui.</div></div>
+          <div class="schedule-details">
+            <div class="schedule-detail"><span>Dia</span><strong id="agenda-weekday">A definir</strong></div>
+            <div class="schedule-detail"><span>Data</span><strong id="agenda-date">A definir</strong></div>
+            <div class="schedule-detail"><span>Horário</span><strong id="agenda-time">A definir</strong></div>
+          </div>
+          <p class="schedule-footnote">Formato da partida: <strong>duplas 2 contra 2</strong></p>
+        </article>
+      </section>
+    </main>
+
+    <footer><span><strong id="footer-name">Campeonato da Galera</strong> · Site do campeonato</span><span>Feito para reunir a comunidade.</span></footer>
+  </div>
+
+  <script>
+    // ================================================================
+    // DUPLAS — EDITE A LISTA AQUI
+    // Para cada jogador, altere "nome" e "foto".
+    // Coloque cada imagem dentro da pasta fotos, ao lado deste index.html.
+    // Exemplo: foto: "fotos/minha-imagem.png"
+    // Para adicionar outra dupla, copie um bloco completo e separe com vírgula.
+    // Até 50 duplas (100 jogadores). O bounty aparece ao passar o mouse.
+    // ================================================================
+    const nomeCampeonato = "Campeonato bLOX fRUIT Dorme Bastante";
+
+    const duplasPadrao = [
+      {
+        jogador1: { nome: "Niluopi", foto: "fotos/ɴɪʟᴜᴏᴘɪ.png" },
+        jogador2: { nome: "ashindrakkkk", foto: "fotos/ashindrakkkk.png" },
+        bounty: "30M Os Dois"
+      },
+      {
+        jogador1: { nome: "FlameGirl", foto: "fotos/FlameGirl.png" },
+        jogador2: { nome: "CaralhoLanches", foto: "fotos/caralhoi Lanches.png" },
+        bounty: "30M Os DOis"
+      },
+      {
+        jogador1: { nome: "bugadojpp", foto: "fotos/sask.png" },
+        jogador2: { nome: "ikeds", foto: "fotos/Urso Polar.png" },
+        bounty: "30M Os DOis"
+      },
+      {
+        jogador1: { nome: "Lenda do pvp", foto: "fotos/jogo.png" },
+        jogador2: { nome: "Vector", foto: "fotos/vector.png" },
+        bounty: "Lenda Do Pvp 30M vector 2.5M"
+      },
+      {
+        jogador1: { nome: "Lua.", foto: "fotos/RenanSantos.png" },
+        jogador2: { nome: "Snow_xs", foto: "fotos/snow.png" },
+        bounty: "lua. 25M Snow_xs 30M"
+      },
+      {
+        jogador1: { nome: "vinixxzz", foto: "fotos/ney.png" },
+        jogador2: { nome: "jeanneHickman96074", foto: "fotos/.png" },
+        bounty: "??"
+      }
+    ];
+
+    // ================================================================
+    // PRÓXIMO CONFRONTO — EDITE AQUI
+    // dupla1 e dupla2 são posições da lista começando em zero:
+    // 0 = Dupla #01, 1 = Dupla #02, 2 = Dupla #03, e assim por diante.
+    // Use data no formato "AAAA-MM-DD" e horario no formato "HH:MM".
+    // Deixe data/horario vazios para mostrar "A definir".
+    // ================================================================
+    const confrontoPvp = {
+      dupla1: 0,
+      dupla2: 1,
+      data: "",
+      horario: ""
+    };
+
+    const limiteDuplas = 50;
+    const duplas = duplasPadrao.slice(0, limiteDuplas);
+    const iniciais = (nome) => nome.trim().split(/\s+/).slice(0, 2).map(parte => parte[0] || "").join("").toUpperCase();
+
+    document.title = nomeCampeonato;
+    document.getElementById("brand-name").textContent = nomeCampeonato;
+    document.getElementById("footer-name").textContent = nomeCampeonato;
+
+    const grid = document.getElementById("players-grid");
+    const emptyState = document.getElementById("empty-state");
+    const search = document.getElementById("search");
+
+    function criarAvatar(nome, foto) {
+      const avatar = document.createElement("div");
+      avatar.className = "avatar";
+      avatar.setAttribute("role", "img");
+      avatar.setAttribute("aria-label", "Foto de " + nome);
+
+      const fallback = document.createElement("span");
+      fallback.textContent = iniciais(nome);
+      avatar.append(fallback);
+
+      if (foto) {
+        const imagem = document.createElement("img");
+        imagem.src = foto;
+        imagem.alt = "Foto de perfil de " + nome;
+        imagem.onerror = () => imagem.remove();
+        avatar.append(imagem);
+      }
+      return avatar;
+    }
+
+    function atualizarResumo() {
+      const totalDuplas = Math.min(duplas.length, limiteDuplas);
+      const totalJogadores = totalDuplas * 2;
+      document.getElementById("nav-count").textContent = totalDuplas;
+      document.getElementById("home-count").textContent = totalJogadores;
+      document.getElementById("home-open").textContent = Math.max(0, 100 - totalJogadores);
+      document.getElementById("list-count").textContent = totalJogadores;
+      document.getElementById("pair-count").textContent = totalDuplas;
+    }
+
+    function renderPlayers() {
+      const listaDuplas = duplas.slice(0, limiteDuplas);
+      const termo = search.value.trim().toLocaleLowerCase("pt-BR");
+      const encontrados = listaDuplas
+        .map((dupla, indice) => ({ dupla, indice }))
+        .filter(({ dupla }) => [dupla.jogador1.nome, dupla.jogador2.nome]
+          .some(nome => nome.toLocaleLowerCase("pt-BR").includes(termo)));
+
+      grid.replaceChildren();
+      emptyState.hidden = encontrados.length > 0;
+
+      if (listaDuplas.length === 0) {
+        document.getElementById("empty-title").textContent = "Ainda não há duplas inscritas";
+        document.getElementById("empty-copy").textContent = "Adicione as duplas no bloco duplasPadrao do código.";
+      } else if (encontrados.length === 0) {
+        document.getElementById("empty-title").textContent = "Nenhum jogador encontrado";
+        document.getElementById("empty-copy").textContent = "Confira a escrita do nome ou tente buscar pelo parceiro da dupla.";
+      }
+
+      encontrados.forEach(({ dupla, indice }) => {
+        const card = document.createElement("article");
+        card.className = "team-card";
+        card.tabIndex = 0;
+
+        const bounty = document.createElement("span");
+        bounty.className = "bounty-tooltip";
+        bounty.textContent = "Bounty 🔥 " + (dupla.bounty || "??");
+
+        const heading = document.createElement("p");
+        heading.className = "team-heading";
+        const teamNumber = document.createElement("span");
+        teamNumber.textContent = "Dupla #" + String(indice + 1).padStart(2, "0");
+        const teamSize = document.createElement("span");
+        teamSize.textContent = "2 jogadores";
+        heading.append(teamNumber, teamSize);
+
+        const members = document.createElement("div");
+        members.className = "team-members";
+
+        [dupla.jogador1, dupla.jogador2].forEach((jogador, posicao) => {
+          const member = document.createElement("div");
+          member.className = "team-member";
+          const avatar = criarAvatar(jogador.nome, jogador.foto);
+          const info = document.createElement("div");
+          info.className = "player-info";
+          const nome = document.createElement("p");
+          nome.className = "player-name";
+          nome.textContent = jogador.nome;
+          const etiqueta = document.createElement("p");
+          etiqueta.className = "player-label";
+          etiqueta.textContent = "Jogador " + (posicao + 1);
+          info.append(nome, etiqueta);
+          member.append(avatar, info);
+          members.append(member);
+        });
+
+        card.append(bounty, heading, members);
+        grid.append(card);
+      });
+    }
+
+    function criarEquipeAgendada(dupla, indice) {
+      const equipe = document.createElement("div");
+      equipe.className = "match-team";
+
+      const titulo = document.createElement("p");
+      titulo.className = "match-team-title";
+      titulo.textContent = "Dupla #" + String(indice + 1).padStart(2, "0");
+
+      const jogadores = document.createElement("div");
+      jogadores.className = "match-team-players";
+
+      [dupla.jogador1, dupla.jogador2].forEach(jogador => {
+        const linha = document.createElement("div");
+        linha.className = "match-player";
+        const nome = document.createElement("span");
+        nome.className = "player-name";
+        nome.textContent = jogador.nome;
+        linha.append(criarAvatar(jogador.nome, jogador.foto), nome);
+        jogadores.append(linha);
+      });
+
+      equipe.append(titulo, jogadores);
+      return equipe;
+    }
+
+    function atualizarAgendaPvp() {
+      const dataElemento = document.getElementById("agenda-date");
+      const diaElemento = document.getElementById("agenda-weekday");
+      const horarioElemento = document.getElementById("agenda-time");
+      const matchup = document.getElementById("agenda-matchup");
+
+      if (confrontoPvp.data) {
+        const data = new Date(confrontoPvp.data + "T12:00:00");
+        if (!Number.isNaN(data.getTime())) {
+          const dia = new Intl.DateTimeFormat("pt-BR", { weekday: "long" }).format(data);
+          diaElemento.textContent = dia.charAt(0).toLocaleUpperCase("pt-BR") + dia.slice(1);
+          dataElemento.textContent = new Intl.DateTimeFormat("pt-BR", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+          }).format(data);
+        } else {
+          diaElemento.textContent = "A definir";
+          dataElemento.textContent = "A definir";
+        }
+      } else {
+        diaElemento.textContent = "A definir";
+        dataElemento.textContent = "A definir";
+      }
+      horarioElemento.textContent = confrontoPvp.horario || "A definir";
+
+      matchup.replaceChildren();
+      const indice1 = Number(confrontoPvp.dupla1);
+      const indice2 = Number(confrontoPvp.dupla2);
+
+      if (Number.isInteger(indice1) && Number.isInteger(indice2)
+          && indice1 >= 0 && indice2 >= 0 && indice1 !== indice2
+          && duplas[indice1] && duplas[indice2]) {
+        const contra = document.createElement("div");
+        contra.className = "versus-badge";
+        contra.textContent = "VS";
+        matchup.append(
+          criarEquipeAgendada(duplas[indice1], indice1),
+          contra,
+          criarEquipeAgendada(duplas[indice2], indice2)
+        );
+      } else {
+        const vazio = document.createElement("div");
+        vazio.className = "matchup-empty";
+        vazio.textContent = "Defina duas duplas diferentes no bloco confrontoPvp do código.";
+        matchup.append(vazio);
+      }
+    }
+
+    function mostrarAba(nomeAba) {
+      document.querySelectorAll(".view").forEach(view => {
+        view.hidden = view.id !== "view-" + nomeAba;
+      });
+      document.querySelectorAll(".nav-button").forEach(button => {
+        button.classList.toggle("active", button.dataset.view === nomeAba);
+      });
+      window.history.replaceState(null, "", "#" + nomeAba);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.querySelectorAll("[data-view]").forEach(button => {
+      button.addEventListener("click", () => mostrarAba(button.dataset.view));
+    });
+    document.querySelectorAll("[data-go]").forEach(button => {
+      button.addEventListener("click", () => mostrarAba(button.dataset.go));
+    });
+    search.addEventListener("input", renderPlayers);
+
+    atualizarResumo();
+    renderPlayers();
+    atualizarAgendaPvp();
+
+    const abaInicial = window.location.hash.slice(1);
+    if (document.getElementById("view-" + abaInicial)) {
+      mostrarAba(abaInicial);
+    } else {
+      mostrarAba("inicio");
+    }
+  </script>
+</body>
+</html>
+
