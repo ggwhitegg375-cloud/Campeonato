@@ -36,7 +36,7 @@
     .nav-button .nav-count { display: inline-grid; place-items: center; min-width: 21px; height: 21px; margin-left: 6px; padding: 0 6px; border-radius: 999px; color: #202718; background: var(--lime); font-size: 11px; }
     main { padding: 44px 0 80px; }
     .view[hidden] { display: none; }
-    .hero { position: relative; overflow: hidden; min-height: 364px; display: flex; align-items: center; padding: clamp(30px, 6vw, 68px); border: 1px solid rgba(255,255,255,.08); border-radius: 30px; background: radial-gradient(ellipse at 82% 17%, rgba(197,243,107,.16), transparent 30%), radial-gradient(ellipse at 90% 98%, rgba(240,163,106,.12), transparent 35%), linear-gradient(130deg, #1d2720, #151a17 63%); }
+    .hero { position: relative; overflow: hidden; min-height: 364px; display: flex; align-items: center; padding: clamp(30px, 6vw, 68px); border: 1px solid rgba(255,255,255,.08); border-radius: 30px; background: linear-gradient(90deg, rgba(5,9,20,.88), rgba(5,9,20,.58) 58%, rgba(5,9,20,.3)), linear-gradient(0deg, rgba(5,9,20,.35), transparent 70%), url("fotos/fundo-discord.png") center 48% / cover no-repeat; }
     .hero::after { content: ""; position: absolute; width: 330px; height: 330px; right: 4%; top: 13%; border: 1px solid rgba(197,243,107,.12); border-radius: 50%; box-shadow: 0 0 0 35px rgba(197,243,107,.025), 0 0 0 70px rgba(197,243,107,.02); pointer-events: none; }
     .hero-content { position: relative; z-index: 1; max-width: 660px; }
     .eyebrow { display: inline-flex; align-items: center; gap: 9px; margin: 0 0 20px; color: var(--lime); font-size: 11px; line-height: 1.4; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
@@ -45,6 +45,10 @@
     h1 { max-width: 650px; margin-bottom: 17px; font-size: clamp(42px, 7vw, 76px); line-height: .99; letter-spacing: -.065em; font-weight: 760; }
     h1 em { color: var(--lime); font-style: normal; }
     .hero-copy { max-width: 495px; margin-bottom: 28px; color: #b6c0b6; font-size: 16px; line-height: 1.7; }
+    .discord-invite { display: flex; align-items: center; justify-content: space-between; gap: 18px; max-width: 490px; margin-top: 22px; padding: 14px 16px; border: 1px solid rgba(112,190,255,.34); border-radius: 16px; background: rgba(5,12,27,.74); backdrop-filter: blur(8px); }
+    .discord-invite p { margin: 0; color: var(--text); font-size: 13px; font-weight: 750; line-height: 1.45; }
+    .discord-button { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 11px 16px; border: 1px solid rgba(133,205,255,.42); border-radius: 999px; color: #061523; background: #83d0ff; font-size: 12px; font-weight: 850; text-decoration: none; transition: transform .2s ease, background .2s ease; }
+    .discord-button:hover { transform: translateY(-2px); background: #b1e3ff; }
     .button-primary { display: inline-flex; align-items: center; gap: 11px; border: 0; padding: 14px 19px; border-radius: 999px; color: #1d2615; background: var(--lime); font-size: 13px; font-weight: 800; transition: transform .2s ease, background .2s ease; }
     .button-primary:hover { transform: translateY(-2px); background: #d5ff83; }
     .button-primary span { font-size: 17px; }
@@ -89,6 +93,10 @@
     .players-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
     .team-card { position: relative; min-width: 0; padding: 15px; border: 1px solid var(--line); border-radius: 18px; background: var(--panel); transition: transform .2s ease, border-color .2s ease; }
     .team-card:hover { transform: translateY(-2px); border-color: rgba(197,243,107,.35); }
+    .open-team-card { border-style: dashed; background: rgba(23,29,25,.58); }
+    .open-team-card .team-heading { color: var(--muted); }
+    .open-team-card .team-member { border-style: dashed; background: rgba(29,37,32,.55); }
+    .open-team-card .player-name { color: #c3ccc2; }
     .bounty-tooltip { position: absolute; z-index: 3; top: -11px; right: 13px; padding: 8px 11px; border: 1px solid rgba(197,243,107,.35); border-radius: 999px; color: #1d2615; background: var(--lime); box-shadow: 0 8px 24px rgba(0,0,0,.3); font-size: 11px; font-weight: 850; opacity: 0; pointer-events: none; transform: translateY(5px); transition: .18s ease; visibility: hidden; white-space: nowrap; }
     .team-card:hover .bounty-tooltip, .team-card:focus .bounty-tooltip, .team-card:focus-within .bounty-tooltip { opacity: 1; transform: translateY(0); visibility: visible; }
     .team-heading { display: flex; justify-content: space-between; gap: 12px; margin: 0 0 13px; color: var(--lime); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
@@ -103,6 +111,7 @@
     .player-name { overflow: hidden; margin: 0 0 5px; color: var(--text); font-size: 13px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
     .player-label { margin: 0; color: var(--muted); font-size: 10px; }
     .empty-state { display: grid; justify-items: center; padding: 62px 24px; border: 1px dashed rgba(238,242,229,.17); border-radius: var(--radius); background: rgba(23,29,25,.58); text-align: center; }
+    .empty-state[hidden] { display: none; }
     .empty-icon { display: grid; place-items: center; width: 60px; height: 60px; margin-bottom: 18px; border: 1px solid rgba(197,243,107,.25); border-radius: 20px; color: var(--lime); background: rgba(197,243,107,.08); font-size: 26px; }
     .empty-state h3 { margin-bottom: 8px; font-size: 19px; letter-spacing: -.02em; }
     .empty-state p { max-width: 410px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
@@ -130,8 +139,9 @@
       .hero::after { width: 250px; height: 250px; top: auto; right: -22%; bottom: 4%; }
       h1 { font-size: clamp(46px, 13vw, 66px); }
       .hero-copy { max-width: 330px; font-size: 14px; }
-      .hero-side-note { right: 25px; bottom: 19px; font-size: 9px; }
-      .hero-side-note strong { font-size: 12px; }
+      .discord-invite { align-items: flex-start; flex-direction: column; gap: 11px; max-width: 330px; margin-top: 18px; }
+      .discord-button { min-height: 44px; }
+      .hero-side-note { display: none; }
       .stats-row { grid-template-columns: 1fr; gap: 9px; }
       .stat-card { display: flex; align-items: center; justify-content: space-between; min-height: auto; padding: 15px 18px; }
       .stat-value { margin: 0; font-size: 25px; }
@@ -155,6 +165,8 @@
       .brand-mark { width: 34px; height: 34px; }
       .nav-button { padding: 8px 9px; font-size: 11px; }
       .hero { padding: 29px 20px; }
+      .hero-side-note { display: none; }
+      .discord-invite { width: 100%; }
       h1 { font-size: clamp(40px, 12vw, 48px); }
       .team-card { padding: 13px; }
     }
@@ -186,6 +198,10 @@
             <h1>A disputa começa <em>aqui.</em></h1>
             <p class="hero-copy">Acompanhe as duplas inscritas e os próximos confrontos do campeonato.</p>
             <button class="button-primary" type="button" data-go="inscritos">Ver duplas inscritas <span aria-hidden="true">↗</span></button>
+            <div class="discord-invite">
+              <p>Ainda não entrou no nosso servidor?</p>
+              <a class="discord-button" href="https://discord.gg/w4VEMxy22A" target="_blank" rel="noopener noreferrer">Entrar <span aria-hidden="true">↗</span></a>
+            </div>
           </div>
           <div class="hero-side-note"><span>Uma vaga na história</span><strong>Você está pronto?</strong></div>
         </div>
@@ -199,11 +215,11 @@
 
       <section class="view" id="view-inscritos" hidden>
         <div class="section-head">
-          <div><p class="section-kicker">A comunidade em campo</p><h2>Duplas inscritas</h2><p>Confira os jogadores que vão competir juntos.</p></div>
+          <div><p class="section-kicker">A comunidade em campo</p><h2>Duplas e vagas</h2><p>Veja as duplas inscritas e as vagas disponíveis para preencher.</p></div>
         </div>
         <div class="list-toolbar">
           <div class="search-wrap"><span aria-hidden="true">⌕</span><input class="search" id="search" type="search" placeholder="Buscar jogador..." aria-label="Buscar jogador inscrito"></div>
-          <div class="capacity"><strong id="list-count">0</strong> / 100 jogadores · <span id="pair-count">0</span> duplas</div>
+          <div class="capacity"><strong id="list-count">0</strong> / 100 jogadores · <span id="pair-count">0</span> / 50 duplas</div>
         </div>
         <div class="players-grid" id="players-grid"></div>
         <div class="empty-state" id="empty-state" hidden>
@@ -239,8 +255,9 @@
     // Para cada jogador, altere "nome" e "foto".
     // Coloque cada imagem dentro da pasta fotos, ao lado deste index.html.
     // Exemplo: foto: "fotos/minha-imagem.png"
-    // Para adicionar outra dupla, copie um bloco completo e separe com vírgula.
-    // Até 50 duplas (100 jogadores). O bounty aparece ao passar o mouse.
+    // Duplas #07 a #50 já estão preparadas abaixo; preencha os dois nomes.
+    // Vagas sem nomes aparecem como espaços abertos, mas não contam como inscritos.
+    // O bounty aparece ao passar o mouse e fica visível em telas sensíveis ao toque.
     // ================================================================
     const nomeCampeonato = "Campeonato bLOX fRUIT Dorme Bastante";
 
@@ -252,7 +269,7 @@
       },
       {
         jogador1: { nome: "FlameGirl", foto: "fotos/FlameGirl.png" },
-        jogador2: { nome: "CaralhoLanches", foto: "fotos/lanches.png" },
+        jogador2: { nome: "CaralhoLanches", foto: "fotos/caralhoi Lanches.png" },
         bounty: "30M Os DOis"
       },
       {
@@ -261,20 +278,64 @@
         bounty: "30M Os DOis"
       },
       {
-        jogador1: { nome: "Lenda do pvp", foto: "fotos/madruga.png" },
+        jogador1: { nome: "Lenda do pvp", foto: "fotos/jogo.png" },
         jogador2: { nome: "Vector", foto: "fotos/vector.png" },
         bounty: "Lenda Do Pvp 30M vector 2.5M"
       },
       {
         jogador1: { nome: "Lua.", foto: "fotos/RenanSantos.png" },
-        jogador2: { nome: "Snow_xs", foto: "fotos/Snow.png" },
+        jogador2: { nome: "Snow_xs", foto: "fotos/snow.png" },
         bounty: "lua. 25M Snow_xs 30M"
       },
       {
-        jogador1: { nome: "vinixxzz", foto: "fotos/Ney.png" },
+        jogador1: { nome: "vinixxzz", foto: "fotos/ney.png" },
         jogador2: { nome: "jeanneHickman96074", foto: "fotos/jeanne-hickman.png" },
-        bounty: "vinixxzz 4.5M jeanne-hickman 2.5M"
-      }
+        bounty: "??"
+      },
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #07
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #08
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #09
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #10
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #11
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #12
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #13
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #14
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #15
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #16
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #17
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #18
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #19
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #20
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #21
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #22
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #23
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #24
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #25
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #26
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #27
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #28
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #29
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #30
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #31
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #32
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #33
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #34
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #35
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #36
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #37
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #38
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #39
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #40
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #41
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #42
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #43
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #44
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #45
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #46
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #47
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #48
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #49
+      { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #50
     ];
 
     // ================================================================
@@ -292,7 +353,9 @@
     };
 
     const limiteDuplas = 50;
-    const duplas = duplasPadrao.slice(0, limiteDuplas);
+    const duplas = duplasPadrao
+      .filter(dupla => dupla.jogador1.nome.trim() && dupla.jogador2.nome.trim())
+      .slice(0, limiteDuplas);
     const iniciais = (nome) => nome.trim().split(/\s+/).slice(0, 2).map(parte => parte[0] || "").join("").toUpperCase();
 
     document.title = nomeCampeonato;
@@ -336,20 +399,23 @@
     }
 
     function renderPlayers() {
-      const listaDuplas = duplas.slice(0, limiteDuplas);
+      const slotsDuplas = duplasPadrao.slice(0, limiteDuplas);
       const termo = search.value.trim().toLocaleLowerCase("pt-BR");
-      const encontrados = listaDuplas
+      const encontrados = duplas
         .map((dupla, indice) => ({ dupla, indice }))
         .filter(({ dupla }) => [dupla.jogador1.nome, dupla.jogador2.nome]
           .some(nome => nome.toLocaleLowerCase("pt-BR").includes(termo)));
+      const vagasAbertas = termo ? [] : slotsDuplas
+        .map((dupla, indice) => ({ dupla, indice }))
+        .filter(({ dupla }) => !dupla.jogador1.nome.trim() || !dupla.jogador2.nome.trim());
 
       grid.replaceChildren();
-      emptyState.hidden = encontrados.length > 0;
+      emptyState.hidden = encontrados.length > 0 || vagasAbertas.length > 0;
 
-      if (listaDuplas.length === 0) {
+      if (slotsDuplas.length === 0) {
         document.getElementById("empty-title").textContent = "Ainda não há duplas inscritas";
         document.getElementById("empty-copy").textContent = "Adicione as duplas no bloco duplasPadrao do código.";
-      } else if (encontrados.length === 0) {
+      } else if (termo && encontrados.length === 0) {
         document.getElementById("empty-title").textContent = "Nenhum jogador encontrado";
         document.getElementById("empty-copy").textContent = "Confira a escrita do nome ou tente buscar pelo parceiro da dupla.";
       }
@@ -392,6 +458,43 @@
         });
 
         card.append(bounty, heading, members);
+        grid.append(card);
+      });
+
+      vagasAbertas.forEach(({ indice }) => {
+        const card = document.createElement("article");
+        card.className = "team-card open-team-card";
+
+        const heading = document.createElement("p");
+        heading.className = "team-heading";
+        const teamNumber = document.createElement("span");
+        teamNumber.textContent = "Dupla #" + String(indice + 1).padStart(2, "0");
+        const teamSize = document.createElement("span");
+        teamSize.textContent = "2 vagas abertas";
+        heading.append(teamNumber, teamSize);
+
+        const members = document.createElement("div");
+        members.className = "team-members";
+        [1, 2].forEach(posicao => {
+          const member = document.createElement("div");
+          member.className = "team-member";
+          const numeroJogador = indice * 2 + posicao;
+          const nomeVaga = "Jogador " + numeroJogador;
+          const avatar = criarAvatar(nomeVaga, "");
+          const info = document.createElement("div");
+          info.className = "player-info";
+          const nome = document.createElement("p");
+          nome.className = "player-name";
+          nome.textContent = "Vaga para " + nomeVaga;
+          const etiqueta = document.createElement("p");
+          etiqueta.className = "player-label";
+          etiqueta.textContent = "Preencha no código · Dupla #" + String(indice + 1).padStart(2, "0");
+          info.append(nome, etiqueta);
+          member.append(avatar, info);
+          members.append(member);
+        });
+
+        card.append(heading, members);
         grid.append(card);
       });
     }
