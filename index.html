@@ -181,6 +181,15 @@
     .matchup-empty { grid-column: 1 / -1; padding: 26px; border: 1px dashed rgba(140,190,255,.3); border-radius: 17px; color: var(--muted); text-align: center; font-size: 14px; }
     .schedule-footnote { margin: 20px 0 0; color: var(--muted); font-size: 13px; }
     .schedule-footnote strong { color: var(--gold); }
+    .schedule-intro { max-width: 760px; margin: -10px 0 22px; color: var(--muted); line-height: 1.65; }
+    .agenda-list { display: grid; gap: 16px; }
+    .agenda-match-card { padding: 18px; border: 1px solid var(--line); border-radius: 19px; background: rgba(5,11,26,.48); }
+    .agenda-match-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; margin-bottom: 14px; }
+    .agenda-match-date { color: var(--cyan); font-size: 13px; font-weight: 800; letter-spacing: .04em; }
+    .agenda-match-bounty { color: var(--gold); font-size: 12px; font-weight: 800; }
+    .agenda-match-card .matchup-display { margin: 0; }
+    .agenda-bye { padding: 15px 17px; border: 1px dashed rgba(255,200,61,.3); border-radius: 16px; color: var(--muted); background: rgba(255,200,61,.045); line-height: 1.55; }
+    .agenda-bye strong { color: var(--gold); }
 
     /* ---------- Abas "Regras" e "Como Vai Funcionar" ---------- */
     .content-card { position: relative; max-width: 880px; padding: clamp(26px, 4vw, 44px); border: 1px solid var(--line); border-radius: 26px; background: radial-gradient(ellipse at 100% 0%, rgba(63,224,255,.09), transparent 40%), linear-gradient(150deg, var(--panel-2), var(--panel)); box-shadow: 0 24px 60px rgba(0,0,0,.35); }
@@ -302,14 +311,10 @@
           <div><p class="section-kicker">Organização do campeonato</p><h2>Horários do PvP</h2><p>Confira quais duplas vão se enfrentar, em que dia e horário.</p></div>
         </div>
         <article class="schedule-card">
-          <div class="schedule-heading"><div><p class="section-kicker">Próximo confronto</p><h3>Duplas selecionadas</h3></div></div>
-          <div class="matchup-display" id="agenda-matchup"><div class="matchup-empty">As duplas do confronto serão mostradas aqui.</div></div>
-          <div class="schedule-details">
-            <div class="schedule-detail"><span>Dia</span><strong id="agenda-weekday">A definir</strong></div>
-            <div class="schedule-detail"><span>Data</span><strong id="agenda-date">A definir</strong></div>
-            <div class="schedule-detail"><span>Horário</span><strong id="agenda-time">A definir</strong></div>
-          </div>
-          <p class="schedule-footnote">Formato da partida: <strong>duplas 2 contra 2</strong></p>
+          <div class="schedule-heading"><div><p class="section-kicker">Início do campeonato · 14/11/2026</p><h3>Agenda de confrontos</h3></div></div>
+          <p class="schedule-intro">Partidas às segundas, quartas e sextas, entre 15:00 e 22:00. Cada luta é 2 contra 2; o bounty das duas duplas aparece em cada confronto.</p>
+          <div class="agenda-list" id="agenda-list"></div>
+          <p class="schedule-footnote">Uma dupla fica de folga nesta rodada. Duplas incompletas entram na agenda quando tiverem os dois jogadores.</p>
         </article>
       </section>
 
@@ -499,7 +504,7 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
       { jogador1: { nome: "Todinho_sagaz", foto: "fotos/todinho_sagaz.png" }, jogador2: { nome: "PROCURANDO UMA DUPLA...", foto: "" }, bounty: "Todinho_sagaz 10M" }, // Dupla #12
       { jogador1: { nome: "jose.ltx7_98828", foto: "fotos/egoist.png" }, jogador2: { nome: "jlz7w7.", foto: "fotos/gojo.png" }, bounty: "28M MBDark1996 7w747topgan 6M" }, // Dupla #13
       { jogador1: { nome: "Kyo", foto: "fotos/kyo.png" }, jogador2: { nome: "imnotplayer021", foto: "fotos/femboy.png" }, bounty: "30M Os Dois" }, // Dupla #14
-      { jogador1: { nome: "miguelespecie", foto: "fotos/miguelespecie.png" }, jogador2: { nome: "pombo_naochoraxx67", foto: "fotos/pombo_naochoraxx67.png" }, bounty: "arthur_220414 15.2m pombo_naochoraxx67 20m " }, // Dupla #15
+      { jogador1: { nome: "miguelespecie", foto: "fotos/miguelespecie.png" }, jogador2: { nome: "pombo_naochoraxx67", foto: "fotos/pombo_naochoraxx67.png" }, bounty: "miguelespecie 30m pombo_naochoraxx67 20m " }, // Dupla #15
       { jogador1: { nome: "Silent_Killer", foto: "fotos/coringa.png" }, jogador2: { nome: "Alek_777b", foto: "fotos/Alek_777b.png" }, bounty: "Dois 30M" }, // Dupla #16
       { jogador1: { nome: "alekiiiis", foto: "fotos/alekiiiis.png" }, jogador2: { nome: "Falta De INF", foto: "" }, bounty: "30M Os Dois" }, // Dupla #17
       { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #18
@@ -537,20 +542,20 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
       { jogador1: { nome: "", foto: "" }, jogador2: { nome: "", foto: "" }, bounty: "??" }, // Dupla #50
     ];
 
-    // ================================================================
-    // PRÓXIMO CONFRONTO — EDITE AQUI
-    // dupla1 e dupla2 são posições da lista começando em zero:
-    // 0 = Dupla #01, 1 = Dupla #02, 2 = Dupla #03, e assim por diante.
-    // Use data no formato "AAAA-MM-DD" e horario no formato "HH:MM".
-    // Deixe data/horario vazios para mostrar "A definir".
-    // ================================================================
-    const confrontoPvp = {
-      dupla1: 0,
-      dupla2: 1,
-      data: "",
-      horario: ""
-    };
-
+    // Agenda: os índices abaixo seguem a lista de duplas completas (começa em zero).
+    // Bounties estimados a partir dos valores informados no cadastro das duplas.
+    // 14/11/2026 é a abertura; como cai num sábado, os PvPs começam na segunda 16/11.
+    const bountyPorDuplaM = [30, 30, 30, 30, 30, 7, 30, 30, 30, 16.8, 30, 30, 30, 30, 30];
+    const agendaPvp = [
+      { dupla1: 0, dupla2: 1, data: "2026-11-16", horario: "15:00" },
+      { dupla1: 2, dupla2: 6, data: "2026-11-16", horario: "17:00" },
+      { dupla1: 8, dupla2: 12, data: "2026-11-16", horario: "19:00" },
+      { dupla1: 14, dupla2: 3, data: "2026-11-18", horario: "15:00" },
+      { dupla1: 11, dupla2: 13, data: "2026-11-18", horario: "17:00" },
+      { dupla1: 7, dupla2: 9, data: "2026-11-20", horario: "15:00" },
+      { dupla1: 10, dupla2: 4, data: "2026-11-20", horario: "17:00" }
+    ];
+    const duplaDeFolga = 5;
     const limiteDuplas = 50;
     const duplas = duplasPadrao
       .filter(dupla => dupla.jogador1.nome.trim() && dupla.jogador2.nome.trim())
@@ -723,55 +728,58 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
       return equipe;
     }
 
+    function formatarBounty(valor) {
+      return Number.isInteger(valor) ? String(valor) + "M" : String(valor).replace(".", ",") + "M";
+    }
+
     function atualizarAgendaPvp() {
-      const dataElemento = document.getElementById("agenda-date");
-      const diaElemento = document.getElementById("agenda-weekday");
-      const horarioElemento = document.getElementById("agenda-time");
-      const matchup = document.getElementById("agenda-matchup");
+      const lista = document.getElementById("agenda-list");
+      lista.replaceChildren();
 
-      if (confrontoPvp.data) {
-        const data = new Date(confrontoPvp.data + "T12:00:00");
-        if (!Number.isNaN(data.getTime())) {
-          const dia = new Intl.DateTimeFormat("pt-BR", { weekday: "long" }).format(data);
-          diaElemento.textContent = dia.charAt(0).toLocaleUpperCase("pt-BR") + dia.slice(1);
-          dataElemento.textContent = new Intl.DateTimeFormat("pt-BR", {
-            day: "numeric",
-            month: "long",
-            year: "numeric"
-          }).format(data);
-        } else {
-          diaElemento.textContent = "A definir";
-          dataElemento.textContent = "A definir";
-        }
-      } else {
-        diaElemento.textContent = "A definir";
-        dataElemento.textContent = "A definir";
-      }
-      horarioElemento.textContent = confrontoPvp.horario || "A definir";
+      agendaPvp.forEach(confronto => {
+        const data = new Date(confronto.data + "T12:00:00");
+        const cartao = document.createElement("article");
+        cartao.className = "agenda-match-card";
 
-      matchup.replaceChildren();
-      const indice1 = Number(confrontoPvp.dupla1);
-      const indice2 = Number(confrontoPvp.dupla2);
+        const meta = document.createElement("div");
+        meta.className = "agenda-match-meta";
+        const diaData = document.createElement("span");
+        diaData.className = "agenda-match-date";
+        diaData.textContent = new Intl.DateTimeFormat("pt-BR", {
+          weekday: "long", day: "numeric", month: "long"
+        }).format(data) + " · " + confronto.horario;
+        const bounty = document.createElement("span");
+        bounty.className = "agenda-match-bounty";
+        const b1 = bountyPorDuplaM[confronto.dupla1];
+        const b2 = bountyPorDuplaM[confronto.dupla2];
+        bounty.textContent = "Bounty: " + formatarBounty(b1) + " + " + formatarBounty(b2)
+          + " = " + formatarBounty(b1 + b2);
+        meta.append(diaData, bounty);
 
-      if (Number.isInteger(indice1) && Number.isInteger(indice2)
-          && indice1 >= 0 && indice2 >= 0 && indice1 !== indice2
-          && duplas[indice1] && duplas[indice2]) {
+        const matchup = document.createElement("div");
+        matchup.className = "matchup-display";
         const contra = document.createElement("div");
         contra.className = "versus-badge";
         contra.textContent = "VS";
         matchup.append(
-          criarEquipeAgendada(duplas[indice1], indice1),
+          criarEquipeAgendada(duplas[confronto.dupla1], confronto.dupla1),
           contra,
-          criarEquipeAgendada(duplas[indice2], indice2)
+          criarEquipeAgendada(duplas[confronto.dupla2], confronto.dupla2)
         );
-      } else {
-        const vazio = document.createElement("div");
-        vazio.className = "matchup-empty";
-        vazio.textContent = "Defina duas duplas diferentes no bloco confrontoPvp do código.";
-        matchup.append(vazio);
+        cartao.append(meta, matchup);
+        lista.append(cartao);
+      });
+
+      if (duplas[duplaDeFolga]) {
+        const folga = document.createElement("p");
+        folga.className = "agenda-bye";
+        const nomes = duplas[duplaDeFolga].jogador1.nome + " / " + duplas[duplaDeFolga].jogador2.nome;
+        folga.innerHTML = "Folga nesta rodada: <strong></strong> · bounty informado: "
+          + formatarBounty(bountyPorDuplaM[duplaDeFolga]) + ".";
+        folga.querySelector("strong").textContent = "Dupla #" + String(duplaDeFolga + 1).padStart(2, "0") + " — " + nomes;
+        lista.append(folga);
       }
     }
-
     function mostrarAba(nomeAba) {
       document.querySelectorAll(".view").forEach(view => {
         view.hidden = view.id !== "view-" + nomeAba;
