@@ -545,18 +545,16 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
     // Agenda: os índices abaixo seguem a lista de duplas completas (começa em zero).
     // Bounties estimados a partir dos valores informados no cadastro das duplas.
     // 14/11/2026 é a abertura; como cai num sábado, os PvPs começam na segunda 16/11.
-    const bountyPorDuplaM = [30, 30, 30, 30, 30, 7, 30, 30, 30, 16.8, 30, 30, 30, 30, 30];
     const agendaPvp = [
       { dupla1: 0, dupla2: 1, data: "2026-11-16", horario: "15:00" },
       { dupla1: 2, dupla2: 6, data: "2026-11-16", horario: "17:00" },
-      { dupla1: 8, dupla2: 12, data: "2026-11-16", horario: "19:00" },
-      { dupla1: 14, dupla2: 3, data: "2026-11-18", horario: "15:00" },
-      { dupla1: 11, dupla2: 13, data: "2026-11-18", horario: "17:00" },
+      { dupla1: 8, dupla2: 13, data: "2026-11-16", horario: "19:00" },
+      { dupla1: 16, dupla2: 3, data: "2026-11-18", horario: "15:00" },
+      { dupla1: 15, dupla2: 12, data: "2026-11-18", horario: "17:00" },
       { dupla1: 7, dupla2: 9, data: "2026-11-20", horario: "15:00" },
       { dupla1: 10, dupla2: 4, data: "2026-11-20", horario: "17:00" }
     ];
-    const duplaDeFolga = 5;
-    const limiteDuplas = 50;
+    const duplaDeFolga = 14;    const limiteDuplas = 50;
     const duplas = duplasPadrao
       .filter(dupla => dupla.jogador1.nome.trim() && dupla.jogador2.nome.trim())
       .slice(0, limiteDuplas);
@@ -608,7 +606,7 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
       const encontrados = duplas
         .map((dupla, indice) => ({ dupla, indice }))
         .filter(({ dupla }) => [dupla.jogador1.nome, dupla.jogador2.nome]
-          .some(nome => nome.toLocaleLowerCase("pt-BR").includes(termo)));
+          .some(nome => nome.toLocaleLowerCase("pt-BR").includes(termo)) && (indice !== 16 || dupla.jogador1.nome.trim() || dupla.jogador2.nome.trim()));
       const vagasAbertas = termo ? [] : slotsDuplas
         .map((dupla, indice) => ({ dupla, indice }))
         .filter(({ dupla }) => !dupla.jogador1.nome.trim() || !dupla.jogador2.nome.trim());
