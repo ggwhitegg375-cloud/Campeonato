@@ -563,15 +563,16 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
     // Exemplo: { ..., wo: true, vencedorWO: 7 }. Para jogo normal, omita esses campos.
     // ================================================================
     const agendaPvp = [
-      { data: "2026-11-14", horario: "22:20", dupla1: 1, dupla2: 2, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"] },
+      { data: "2026-11-14", horario: "20:00", dupla1: 1, dupla2: 2, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"] },
       { data: "2026-11-14", horario: "15:00", dupla1: 3, dupla2: 7, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"], desclassificado: true, motivo: "Off-line" },
       { data: "2026-11-14", horario: "17:00", dupla1: 9, dupla2: 14, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"], wo: true, vencedorWO: 14 },
-      { data: "2026-11-15", horario: "22:00", dupla1: 17, dupla2: 16, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"] },
+      { data: "2026-11-15", horario: "10:00", dupla1: 17, dupla2: 16, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"] },
       { data: "2026-11-15", horario: "14:00", dupla1: 4, dupla2: 13, bounty1: ["30M", "2.5M"], bounty2: ["28M", "6M"] },
       { data: "2026-11-15", horario: "15:00", dupla1: 6, dupla2: 8, bounty1: ["4.5M", "2.5M"], bounty2: ["6.04M", "8.98M"] },
-      { data: "2026-11-16", horario: "18:00", dupla1: 11, dupla2: 5, bounty1: ["28M", "18M"], bounty2: ["25M", "30M"] }
+      { data: "2026-11-16", horario: "18:00", dupla1: 11, dupla2: 5, bounty1: ["28M", "18M"], bounty2: ["25M", "30M"] },
+      { data: "2026-11-16", horario: "20:00", dupla1: 15, dupla2: 10, bounty1: ["30M", "20M"], bounty2: ["10.4M", "6.4M"] }
     ];
-    const duplaDeFolga = 15;    const limiteDuplas = 50;
+    const limiteDuplas = 50;
     const duplas = duplasPadrao
       .filter(dupla => dupla.jogador1.nome.trim() && dupla.jogador2.nome.trim())
       .slice(0, limiteDuplas);
@@ -791,10 +792,7 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
         }
         lista.append(card);
       });
-      const folga = document.createElement("p");
-      folga.className = "agenda-bye";
-      folga.textContent = "Dupla #" + String(duplaDeFolga).padStart(2, "0") + " fica de folga nesta rodada.";
-      lista.append(folga);
+
     }    function mostrarAba(nomeAba) {
       document.querySelectorAll(".view").forEach(view => {
         view.hidden = view.id !== "view-" + nomeAba;
