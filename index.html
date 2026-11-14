@@ -188,14 +188,20 @@
     .agenda-match-card { padding: 18px; border: 1px solid var(--line); border-radius: 19px; background: rgba(5,11,26,.48); }
     .disqualified-result, .wo-result { display: inline-flex; margin: 0 0 16px; padding: 8px 15px; border: 1px solid rgba(255,83,83,.6); border-radius: 999px; color: #fff; background: linear-gradient(100deg,#b71928,#f04444); box-shadow: 0 0 18px rgba(240,68,68,.3); font-size: 13px; font-weight: 900; letter-spacing: .08em; }
     .agenda-match-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; margin-bottom: 14px; }
-    .agenda-match-date { color: var(--cyan); font-size: 13px; font-weight: 800; letter-spacing: .04em; }
+    .agenda-match-date { display: flex; align-items: center; gap: 12px; min-width: 210px; padding: 9px 15px 9px 10px; border: 1px solid rgba(63,224,255,.38); border-radius: 16px; color: var(--cyan); background: linear-gradient(110deg, rgba(63,224,255,.13), rgba(12,24,48,.84)); box-shadow: inset 0 0 18px rgba(63,224,255,.06), 0 5px 20px rgba(0,0,0,.18); }
+    .agenda-day-number { display: grid; place-items: center; width: 54px; height: 54px; flex: 0 0 54px; border-radius: 14px; color: #071225; background: linear-gradient(145deg, #8ff4ff, #3fe0ff); box-shadow: 0 0 18px rgba(63,224,255,.32); font-family: var(--display); font-size: 32px; line-height: 1; }
+    .agenda-date-label { display: flex; flex-direction: column; gap: 3px; color: #fff; font-size: 14px; font-weight: 850; line-height: 1.15; text-transform: capitalize; }
+    .agenda-date-label small { color: var(--cyan); font-size: 10px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
     .agenda-time { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 16px; padding: 9px 16px; border: 2px solid var(--gold); border-radius: 999px; color: #071225; background: linear-gradient(100deg, #ffe27a, #ff9d36); box-shadow: 0 0 22px rgba(255,180,48,.35); font-family: var(--display); font-size: 22px; letter-spacing: .05em; }
     .agenda-time-label { color: #72501b; font: 800 10px/1.1 "Outfit", sans-serif; letter-spacing: .12em; }
     .agenda-players { display: grid; gap: 10px; }
     .agenda-player { display: flex; align-items: center; gap: 10px; min-width: 0; font-weight: 750; }
     .player-bounty { margin-left: auto; color: #ff3434; font-size: 22px; font-weight: 600; }
     .agenda-photo { width: 42px; height: 42px; flex: 0 0 42px; border: 2px solid rgba(255,200,61,.7); border-radius: 12px; object-fit: cover; background: #0d1b3a; }
-    .agenda-match-date { color: var(--cyan); font-size: 13px; font-weight: 800; letter-spacing: .04em; }
+    .agenda-match-date { display: flex; align-items: center; gap: 12px; min-width: 210px; padding: 9px 15px 9px 10px; border: 1px solid rgba(63,224,255,.38); border-radius: 16px; color: var(--cyan); background: linear-gradient(110deg, rgba(63,224,255,.13), rgba(12,24,48,.84)); box-shadow: inset 0 0 18px rgba(63,224,255,.06), 0 5px 20px rgba(0,0,0,.18); }
+    .agenda-day-number { display: grid; place-items: center; width: 54px; height: 54px; flex: 0 0 54px; border-radius: 14px; color: #071225; background: linear-gradient(145deg, #8ff4ff, #3fe0ff); box-shadow: 0 0 18px rgba(63,224,255,.32); font-family: var(--display); font-size: 32px; line-height: 1; }
+    .agenda-date-label { display: flex; flex-direction: column; gap: 3px; color: #fff; font-size: 14px; font-weight: 850; line-height: 1.15; text-transform: capitalize; }
+    .agenda-date-label small { color: var(--cyan); font-size: 10px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
     .agenda-match-bounty { color: var(--gold); font-size: 12px; font-weight: 800; }
     .agenda-match-card .matchup-display { margin: 0; }
     .agenda-bye { padding: 15px 17px; border: 1px dashed rgba(255,200,61,.3); border-radius: 16px; color: var(--muted); background: rgba(255,200,61,.045); line-height: 1.55; }
@@ -759,9 +765,19 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
         const data = new Date(luta.data + "T12:00:00");
         const card = document.createElement("article");
         card.className = "agenda-match-card";
-        const dataEl = document.createElement("span");
+        const dataEl = document.createElement("div");
         dataEl.className = "agenda-match-date";
-        dataEl.textContent = new Intl.DateTimeFormat("pt-BR", { weekday: "long", day: "numeric", month: "long" }).format(data);
+        const numeroDia = document.createElement("strong");
+        numeroDia.className = "agenda-day-number";
+        numeroDia.textContent = String(data.getDate()).padStart(2, "0");
+        const dataLabel = document.createElement("span");
+        dataLabel.className = "agenda-date-label";
+        const semana = document.createElement("small");
+        semana.textContent = new Intl.DateTimeFormat("pt-BR", { weekday: "long" }).format(data);
+        const mesAno = document.createElement("span");
+        mesAno.textContent = new Intl.DateTimeFormat("pt-BR", { month: "long", year: "numeric" }).format(data);
+        dataLabel.append(semana, mesAno);
+        dataEl.append(numeroDia, dataLabel);
         const horario = document.createElement("div");
         horario.className = "agenda-time";
         horario.innerHTML = '<span class="agenda-time-label">HORÁRIO DO PvP</span> ' + luta.horario;
