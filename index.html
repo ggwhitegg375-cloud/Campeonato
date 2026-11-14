@@ -744,7 +744,14 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
       const lista = document.getElementById("agenda-list");
       if (!lista) return;
       lista.replaceChildren();
-      agendaPvp.forEach(luta => {
+
+      // Ordena por data e horário antes de montar os cartões.
+      // Para mudar a ordem, edite data/horario no bloco agendaPvp acima.
+      const lutasOrdenadas = [...agendaPvp].sort((a, b) =>
+        (a.data + "T" + a.horario).localeCompare(b.data + "T" + b.horario)
+      );
+
+      lutasOrdenadas.forEach(luta => {
         const data = new Date(luta.data + "T12:00:00");
         const card = document.createElement("article");
         card.className = "agenda-match-card";
