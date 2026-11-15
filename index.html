@@ -577,9 +577,9 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
     const agendaPvp = [
       { data: "2026-11-14", horario: "20:00", dupla1: 1, dupla2: 2, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"], vencedor: 2 },
       { data: "2026-11-14", horario: "15:00", dupla1: 3, dupla2: 7, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"], desclassificado: true, motivo: "Off-line" },
-      { data: "2026-11-14", horario: "17:00", dupla1: 9, dupla2: 14, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"], wo: true, vencedorWO: 14 },
+      { data: "2026-11-14", horario: "17:00", dupla1: 9, dupla2: 14, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"], wo: true, vencedorWO: 14, vencedor: 14 },
       { data: "2026-11-15", horario: "17:00", dupla1: 17, dupla2: 16, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"] },
-      { data: "2026-11-15", horario: "14:00", dupla1: 4, dupla2: 13, bounty1: ["30M", "2.5M"], bounty2: ["28M", "6M"] },
+      { data: "2026-11-15", horario: "14:00", dupla1: 4, dupla2: 13, bounty1: ["30M", "2.5M"], bounty2: ["28M", "6M"], wo: true, vencedorWO: 4, vencedor: 4 },
       { data: "2026-11-15", horario: "15:00", dupla1: 6, dupla2: 8, bounty1: ["4.5M", "2.5M"], bounty2: ["6.04M", "8.98M"] },
       { data: "2026-11-16", horario: "18:00", dupla1: 11, dupla2: 5, bounty1: ["28M", "18M"], bounty2: ["25M", "30M"] },
       { data: "2026-11-16", horario: "20:00", dupla1: 15, dupla2: 10, bounty1: ["30M", "20M"], bounty2: ["10.4M", "6.4M"] },
@@ -800,10 +800,10 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
         const vs = document.createElement("div");
         vs.className = "versus-badge";
         vs.textContent = "VS";
-        const equipe1 = criarEquipeAgendada(luta.dupla1, luta.bounty1, luta.vencedor === luta.dupla1);
+        const equipe1 = criarEquipeAgendada(luta.dupla1, luta.bounty1, (luta.vencedor === luta.dupla1 || luta.vencedorWO === luta.dupla1));
         let equipe2;
         if (luta.dupla2) {
-          equipe2 = criarEquipeAgendada(luta.dupla2, luta.bounty2, luta.vencedor === luta.dupla2);
+          equipe2 = criarEquipeAgendada(luta.dupla2, luta.bounty2, (luta.vencedor === luta.dupla2 || luta.vencedorWO === luta.dupla2));
         } else {
           equipe2 = document.createElement("div");
           equipe2.className = "match-team opponent-pending";
