@@ -175,6 +175,11 @@
     .schedule-detail strong { display: block; font-size: clamp(17px, 2.2vw, 22px); font-weight: 700; text-transform: capitalize; }
     .matchup-display { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 16px; margin-bottom: 22px; }
     .match-team { min-width: 0; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: rgba(5,11,26,.55); }
+    .match-team.is-winner { position: relative; overflow: hidden; border: 2px solid #ffe477; background: linear-gradient(145deg, rgba(255,218,86,.2), rgba(5,11,26,.88) 64%); animation: winnerGlow 2.4s ease-in-out infinite; }
+    .match-team.is-winner::after { content: ""; position: absolute; inset: -60% auto -60% -45%; width: 35%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.24), transparent); transform: rotate(20deg); animation: winnerShine 3.2s ease-in-out infinite; pointer-events: none; }
+    .winner-badge { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 11px; padding: 6px 11px; border-radius: 999px; color: #241900; background: linear-gradient(100deg,#fff09b,#ffc83d); box-shadow: 0 0 18px rgba(255,200,61,.48); font-size: 11px; font-weight: 950; letter-spacing: .12em; text-transform: uppercase; }
+    @keyframes winnerGlow { 0%,100% { box-shadow: 0 0 12px rgba(255,200,61,.24), inset 0 0 12px rgba(255,200,61,.04); } 50% { box-shadow: 0 0 32px rgba(255,200,61,.62), inset 0 0 22px rgba(255,200,61,.12); } }
+    @keyframes winnerShine { 0%,55% { left: -45%; } 100% { left: 130%; } }
     .match-team-title { margin: 0 0 14px; color: var(--gold); font-family: var(--display); font-size: 18px; letter-spacing: .05em; text-transform: uppercase; }
     .match-team-players { display: grid; gap: 11px; }
     .match-player { display: flex; align-items: center; gap: 11px; min-width: 0; }
@@ -569,7 +574,7 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
     // Exemplo: { ..., wo: true, vencedorWO: 7 }. Para jogo normal, omita esses campos.
     // ================================================================
     const agendaPvp = [
-      { data: "2026-11-14", horario: "20:00", dupla1: 1, dupla2: 2, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"] },
+      { data: "2026-11-14", horario: "20:00", dupla1: 1, dupla2: 2, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"], vencedor: 2 },
       { data: "2026-11-14", horario: "15:00", dupla1: 3, dupla2: 7, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"], desclassificado: true, motivo: "Off-line" },
       { data: "2026-11-14", horario: "17:00", dupla1: 9, dupla2: 14, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"], wo: true, vencedorWO: 14 },
       { data: "2026-11-15", horario: "10:00", dupla1: 17, dupla2: 16, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"] },
@@ -725,10 +730,16 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
       });
     }
 
-    function criarEquipeAgendada(numero, bounties) {
+    function criarEquipeAgendada(numero, bounties, isWinner = false) {
       const dupla = duplasPadrao[numero - 1];
       const equipe = document.createElement("div");
-      equipe.className = "match-team";
+      equipe.className = isWinner ? "match-team is-winner" : "match-team";
+      if (isWinner) {
+        const selo = document.createElement("span");
+        selo.className = "winner-badge";
+        selo.textContent = "✦ VENCEDOR ✦";
+        equipe.append(selo);
+      }
       const titulo = document.createElement("p");
       titulo.className = "match-team-title";
       titulo.textContent = "Dupla #" + String(numero).padStart(2, "0");
@@ -786,7 +797,7 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
         const vs = document.createElement("div");
         vs.className = "versus-badge";
         vs.textContent = "VS";
-        times.append(criarEquipeAgendada(luta.dupla1, luta.bounty1), vs, criarEquipeAgendada(luta.dupla2, luta.bounty2));
+        times.append(criarEquipeAgendada(luta.dupla1, luta.bounty1, luta.vencedor === luta.dupla1), vs, criarEquipeAgendada(luta.dupla2, luta.bounty2, luta.vencedor === luta.dupla2));
         const topo = document.createElement("div");
         topo.className = "agenda-match-meta";
         const bounty = document.createElement("span");
