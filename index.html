@@ -175,6 +175,7 @@
     .schedule-detail strong { display: block; font-size: clamp(17px, 2.2vw, 22px); font-weight: 700; text-transform: capitalize; }
     .matchup-display { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 16px; margin-bottom: 22px; }
     .match-team { min-width: 0; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: rgba(5,11,26,.55); }
+    .opponent-pending { display: grid; align-content: center; min-height: 150px; border: 1px dashed rgba(63,224,255,.45); color: var(--muted); }
     .match-team.is-winner { position: relative; overflow: hidden; border: 2px solid #ffe477; background: linear-gradient(145deg, rgba(255,218,86,.2), rgba(5,11,26,.88) 64%); animation: winnerGlow 2.4s ease-in-out infinite; }
     .match-team.is-winner::after { content: ""; position: absolute; inset: -60% auto -60% -45%; width: 35%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.24), transparent); transform: rotate(20deg); animation: winnerShine 3.2s ease-in-out infinite; pointer-events: none; }
     .winner-badge { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 11px; padding: 6px 11px; border-radius: 999px; color: #241900; background: linear-gradient(100deg,#fff09b,#ffc83d); box-shadow: 0 0 18px rgba(255,200,61,.48); font-size: 11px; font-weight: 950; letter-spacing: .12em; text-transform: uppercase; }
@@ -581,7 +582,9 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
       { data: "2026-11-15", horario: "14:00", dupla1: 4, dupla2: 13, bounty1: ["30M", "2.5M"], bounty2: ["28M", "6M"] },
       { data: "2026-11-15", horario: "15:00", dupla1: 6, dupla2: 8, bounty1: ["4.5M", "2.5M"], bounty2: ["6.04M", "8.98M"] },
       { data: "2026-11-16", horario: "18:00", dupla1: 11, dupla2: 5, bounty1: ["28M", "18M"], bounty2: ["25M", "30M"] },
-      { data: "2026-11-16", horario: "20:00", dupla1: 15, dupla2: 10, bounty1: ["30M", "20M"], bounty2: ["10.4M", "6.4M"] }
+      { data: "2026-11-16", horario: "20:00", dupla1: 15, dupla2: 10, bounty1: ["30M", "20M"], bounty2: ["10.4M", "6.4M"] },
+      // Final/novo confronto: a Dupla #02 aguarda a vencedora de amanhã.
+      { data: "2026-11-17", horario: "A definir", dupla1: 2, dupla2: null, bounty1: ["30M", "30M"], bounty2: ["??", "??"], adversarioAguardando: true }
     ];
     const limiteDuplas = 50;
     const duplas = duplasPadrao
@@ -797,7 +800,21 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
         const vs = document.createElement("div");
         vs.className = "versus-badge";
         vs.textContent = "VS";
-        times.append(criarEquipeAgendada(luta.dupla1, luta.bounty1, luta.vencedor === luta.dupla1), vs, criarEquipeAgendada(luta.dupla2, luta.bounty2, luta.vencedor === luta.dupla2));
+        const equipe1 = criarEquipeAgendada(luta.dupla1, luta.bounty1, luta.vencedor === luta.dupla1);
+        let equipe2;
+        if (luta.dupla2) {
+          equipe2 = criarEquipeAgendada(luta.dupla2, luta.bounty2, luta.vencedor === luta.dupla2);
+        } else {
+          equipe2 = document.createElement("div");
+          equipe2.className = "match-team opponent-pending";
+          const aguardando = document.createElement("p");
+          aguardando.className = "match-team-title";
+          aguardando.textContent = "ADVERSÁRIO";
+          const mensagem = document.createElement("p");
+          mensagem.textContent = "A definir após o resultado de amanhã";
+          equipe2.append(aguardando, mensagem);
+        }
+        times.append(equipe1, vs, equipe2);
         const topo = document.createElement("div");
         topo.className = "agenda-match-meta";
         const bounty = document.createElement("span");
