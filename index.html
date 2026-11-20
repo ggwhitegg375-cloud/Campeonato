@@ -228,6 +228,12 @@
     .content-text li::marker { color: var(--gold); font-weight: 800; }
     .content-placeholder { padding: 30px; border: 2px dashed rgba(255,200,61,.5); border-radius: 17px; color: var(--gold); background: rgba(255,200,61,.06); text-align: center; font-weight: 700; }
 
+    .visitor-counter { position: fixed; z-index: 1000; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 8px 13px; border: 1px solid rgba(63,224,255,.32); border-radius: 999px; color: var(--text); background: rgba(7,16,34,.92); box-shadow: 0 8px 28px rgba(0,0,0,.42), inset 0 0 16px rgba(63,224,255,.06); text-decoration: none; backdrop-filter: blur(10px); }
+    .visitor-counter:hover { border-color: rgba(63,224,255,.72); transform: translateY(-2px); }
+    .visitor-counter img { display: block; width: 29px; height: 22px; object-fit: contain; }
+    .visitor-counter-copy { display: grid; gap: 1px; min-width: 42px; text-align: left; }
+    .visitor-counter-copy strong { color: var(--cyan); font-size: 15px; line-height: 1; }
+    .visitor-counter-copy small { color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
     footer { display: flex; justify-content: space-between; gap: 20px; padding: 24px 0 32px; border-top: 1px solid var(--line); color: #6a7da0; font-size: 12px; }
     footer strong { color: var(--text); font-weight: 600; }
 
@@ -589,7 +595,7 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
       { data: "2026-11-22", horario: "23:10", dupla1: 2, dupla2: 14, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"] },
       { data: "2026-11-18", horario: "21:50", dupla1: 17, dupla2: 4, bounty1: ["30M", "30M"], bounty2: ["30M", "2.5M"], vencedor: 17, placar: "3 a 0" },
       { data: "2026-11-17", horario: "17:00", dupla1: 10, dupla2: 6, bounty1: ["10.4M", "6.4M"], bounty2: ["4.5M", "10M"], vencedor: 10, placar: "3 a 1" },
-      { data: "2026-11-19", horario: "21:30", dupla1: 10, dupla2: 17, bounty1: ["10.4M", "6.4M"], bounty2: ["30M", "30M"], vencedor: 17, placar: "3 a 0" },
+      { data: "2026-11-19", horario: "21:30", dupla1: 10, dupla2: 17, bounty1: ["10.4M", "6.4M"], bounty2: ["30M", "30M"] },
     ];
     const limiteDuplas = 50;
     const duplas = duplasPadrao
@@ -880,6 +886,37 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
     } else {
       mostrarAba("inicio");
     }
-  </script>
-</body>
+
+    // Contador global simples: soma uma visita por navegador (usa armazenamento local).
+    // O total é guardado no serviço público CountAPI, fora deste site estático.
+    (async function carregarContadorVisitas() {
+      const campo = document.getElementById("visitor-count");
+      if (!campo) return;
+      const chave = "campeonato_blox_fruit_dorme_bastante_visitas_2026_v1";
+      let primeiraVisitaNesteNavegador = true;
+      try {
+        primeiraVisitaNesteNavegador = localStorage.getItem(chave) !== "contado";
+      } catch (_) {}
+
+      const operacao = primeiraVisitaNesteNavegador ? "hit" : "get";
+      const endereco = "https://countapi.mileshilliard.com/api/v1/" + operacao + "/" + chave;
+      try {
+        const resposta = await fetch(endereco, { cache: "no-store" });
+        if (!resposta.ok) throw new Error("Contador indisponível");
+        const resultado = await resposta.json();
+        const total = Number(resultado.value);
+        if (!Number.isFinite(total)) throw new Error("Número de visitas inválido");
+        campo.textContent = total.toLocaleString("pt-BR");
+        if (primeiraVisitaNesteNavegador) {
+          try { localStorage.setItem(chave, "contado"); } catch (_) {}
+        }
+      } catch (_) {
+        campo.textContent = "—";
+        campo.title = "O contador de visitas está temporariamente indisponível.";
+      }
+    })();  </script>
+  <a class="visitor-counter" href="https://countapi.mileshilliard.com/" target="_blank" rel="noopener noreferrer" aria-label="Contador de visitas do campeonato">
+    <img src="fotos/icone-visitantes.png" alt="">
+    <span class="visitor-counter-copy"><strong id="visitor-count">—</strong><small>visitas</small></span>
+  </a></body>
 </html>
