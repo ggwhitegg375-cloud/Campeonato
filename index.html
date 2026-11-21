@@ -262,22 +262,6 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 24px
       .players-grid { grid-template-columns: 1fr; gap: 12px; }
       .team-members { grid-template-columns: 1fr; }
       .content-text { font-size: 15px; }
-    .bracket-intro { margin: 0 0 18px; color: var(--muted); line-height: 1.6; }
-    .bracket-board { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-    .bracket-game { position: relative; padding: 15px; border: 1px solid var(--line); border-radius: 17px; background: linear-gradient(145deg, rgba(18,34,70,.82), rgba(5,11,26,.9)); }
-    .bracket-game-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 11px; color: var(--gold); font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
-    .bracket-status { color: var(--cyan); font-size: 10px; letter-spacing: .02em; text-align: right; }
-    .bracket-team { display: grid; gap: 7px; padding: 10px; border: 1px solid rgba(140,190,255,.12); border-radius: 13px; background: rgba(4,10,24,.62); }
-    .bracket-team.is-winner { border-color: rgba(255,224,119,.75); box-shadow: inset 0 0 18px rgba(255,200,61,.1), 0 0 12px rgba(255,200,61,.12); }
-    .bracket-team-name { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--gold); font-size: 11px; font-weight: 900; }
-    .bracket-winner-tag { padding: 3px 7px; border-radius: 999px; color: #241900; background: linear-gradient(100deg,#fff09b,#ffc83d); font-size: 8px; letter-spacing: .08em; }
-    .bracket-players { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px; }
-    .bracket-player { display: flex; align-items: center; gap: 6px; min-width: 0; color: var(--text); font-size: 10px; font-weight: 750; }
-    .bracket-player .avatar { width: 31px; height: 31px; flex: 0 0 31px; border-radius: 9px; font-size: 10px; }
-    .bracket-player .avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .bracket-player-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .bracket-vs { margin: 6px 0; color: var(--flame); font-family: var(--display); font-size: 12px; text-align: center; }
-    @media (max-width: 650px) { .bracket-board { grid-template-columns: 1fr; } .bracket-players { grid-template-columns: 1fr 1fr; } }
     footer { flex-direction: column; gap: 7px; }
     }
     @media (max-width: 360px) {
@@ -301,8 +285,7 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 24px
         <button class="nav-button active" type="button" data-view="inicio">Início</button>
         <button class="nav-button" type="button" data-view="inscritos">Duplas <span class="nav-count" id="nav-count">0</span></button>
         <button class="nav-button" type="button" data-view="agenda">Horários</button>
-        <button class="nav-button" type="button" data-view="chaveamento">Chaveamento</button>
-        <button class="nav-button" type="button" data-view="regras">Regras</button>
+<button class="nav-button" type="button" data-view="regras">Regras</button>
         <button class="nav-button" type="button" data-view="como-funciona">Como Vai Funcionar</button>
       </nav>
     </header>
@@ -371,12 +354,7 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 24px
       ████████████████████████████████████████████████████████████████████████
       ████████████████████████████████████████████████████████████████████████
       -->
-      <section class="view" id="view-chaveamento" hidden>
-        <div class="section-head"><div><p class="section-kicker">Tabela do torneio</p><h2>Chaveamento</h2><p>Veja os confrontos, os jogadores e os resultados já registrados.</p></div></div>
-        <p class="bracket-intro">As fotos vêm automaticamente do cadastro das duplas. Os vencedores conhecidos ficam destacados.</p>
-        <div class="bracket-board" id="bracket-board"></div>
-      </section>
-      <section class="view" id="view-regras" hidden>
+<section class="view" id="view-regras" hidden>
         <div class="section-head">
           <div><p class="section-kicker">Antes de jogar</p><h2>Regras</h2><p>Leia com atenção. Participar do campeonato significa aceitar todas as regras abaixo.</p></div>
         </div>
@@ -607,23 +585,12 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
       { data: "2026-11-16", horario: "18:00", dupla1: 11, dupla2: 5, bounty1: ["28M", "18M"], bounty2: ["25M", "30M"], wo: true, vencedorWO: 11, vencedor: 11   },
       { data: "2026-11-16", horario: "20:00", dupla1: 15, dupla2: 10, bounty1: ["30M", "20M"], bounty2: ["10.4M", "6.4M"],  wo: true, vencedorWO: 15, vencedor: 15 },
       // Final/novo confronto: a Dupla #02 aguarda a vencedora de amanhã.
-      { data: "2026-11-20", horario: "19:00", dupla1: 11, dupla2: 15, bounty1: ["28M", "18M"], bounty2: ["30M", "20M"] },
+      { data: "2026-11-20", horario: "19:00", dupla1: 11, dupla2: 15, bounty1: ["28M", "18M"], bounty2: ["30M", "20M"], vencedor: 11, placar: "3 a 1" },
       { data: "2026-11-22", horario: "23:10", dupla1: 2, dupla2: 14, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"] },
       { data: "2026-11-18", horario: "21:50", dupla1: 17, dupla2: 4, bounty1: ["30M", "30M"], bounty2: ["30M", "2.5M"], vencedor: 17, placar: "3 a 0" },
       { data: "2026-11-17", horario: "17:00", dupla1: 10, dupla2: 6, bounty1: ["10.4M", "6.4M"], bounty2: ["4.5M", "10M"], vencedor: 10, placar: "3 a 1" },
-      { data: "2026-11-19", horario: "21:30", dupla1: 10, dupla2: 17, bounty1: ["10.4M", "6.4M"], bounty2: ["30M", "30M"] },
-    ];
-    // CHAVEAMENTO EDITÁVEL — altere as duplas, o vencedor e o resultado. As fotos vêm de duplasPadrao.
-    // vencedor recebe o número da dupla vencedora; status registra W.O. ou desclassificação.
-    const jogosChaveamento = [
-      { dupla1: 1, dupla2: 2, vencedor: 2, placar: "3 a 0" },
-      { dupla1: 3, dupla2: 7, status: "Desclassificadas · off-line" },
-      { dupla1: 9, dupla2: 14, vencedor: 14, status: "W.O." },
-      { dupla1: 17, dupla2: 16, vencedor: 17, placar: "3 a 2" },
-      { dupla1: 4, dupla2: 13, vencedor: 4, status: "W.O." },
-      { dupla1: 6, dupla2: 8, vencedor: 6, status: "W.O." },
-      { dupla1: 11, dupla2: 5, vencedor: 11, status: "W.O." },
-      { dupla1: 15, dupla2: 10, vencedor: 15, status: "W.O." }
+      { data: "2026-11-19", horario: "21:30", dupla1: 10, dupla2: 17, bounty1: ["10.4M", "6.4M"], bounty2: ["30M", "30M"], vencedor: 17 },
+      { data: "", horario: "", dupla1: 17, dupla2: 11, bounty1: ["30M", "30M"], bounty2: ["28M", "18M"] },
     ];
     const limiteDuplas = 50;
     const duplas = duplasPadrao
@@ -811,29 +778,29 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
       // Ordena por data e horário antes de montar os cartões.
       // Para mudar a ordem, edite data/horario no bloco agendaPvp acima.
       const lutasOrdenadas = [...agendaPvp].sort((a, b) =>
-        (a.data + "T" + a.horario).localeCompare(b.data + "T" + b.horario)
+        ((a.data || "9999-12-31") + "T" + (a.horario || "23:59")).localeCompare(((b.data || "9999-12-31") + "T" + (b.horario || "23:59")))
       );
 
       lutasOrdenadas.forEach(luta => {
-        const data = new Date(luta.data + "T12:00:00");
+        const data = luta.data ? new Date(luta.data + "T12:00:00") : null;
         const card = document.createElement("article");
         card.className = "agenda-match-card";
         const dataEl = document.createElement("div");
         dataEl.className = "agenda-match-date";
         const numeroDia = document.createElement("strong");
         numeroDia.className = "agenda-day-number";
-        numeroDia.textContent = String(data.getDate()).padStart(2, "0");
+        numeroDia.textContent = data ? String(data.getDate()).padStart(2, "0") : "??";
         const dataLabel = document.createElement("span");
         dataLabel.className = "agenda-date-label";
         const semana = document.createElement("small");
-        semana.textContent = new Intl.DateTimeFormat("pt-BR", { weekday: "long" }).format(data);
+        semana.textContent = data ? new Intl.DateTimeFormat("pt-BR", { weekday: "long" }).format(data) : "Dia a definir";
         const mesAno = document.createElement("span");
-        mesAno.textContent = new Intl.DateTimeFormat("pt-BR", { month: "long", year: "numeric" }).format(data);
+        mesAno.textContent = data ? new Intl.DateTimeFormat("pt-BR", { month: "long", year: "numeric" }).format(data) : "Data a definir";
         dataLabel.append(semana, mesAno);
         dataEl.append(numeroDia, dataLabel);
         const horario = document.createElement("div");
         horario.className = "agenda-time";
-        horario.innerHTML = '<span class="agenda-time-label">HORÁRIO DO PvP</span> ' + luta.horario;
+        horario.innerHTML = '<span class="agenda-time-label">HORÁRIO DO PvP</span> ' + (luta.horario || "A definir");
         const times = document.createElement("div");
         times.className = "matchup-display";
         const vs = document.createElement("div");
@@ -865,6 +832,11 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
           placar.className = "match-score";
           placar.textContent = "✦ PLACAR FINAL · " + luta.placar.toUpperCase() + " ✦";
           card.append(topo, horario, placar, times);
+        } else if (luta.vencedor) {
+          const resultado = document.createElement("div");
+          resultado.className = "match-score";
+          resultado.textContent = "✦ VITÓRIA · DUPLA #" + String(luta.vencedor).padStart(2, "0") + " ✦";
+          card.append(topo, horario, resultado, times);
         } else if (luta.wo) {
           const resultado = document.createElement("div");
           resultado.className = "wo-result";
@@ -883,61 +855,6 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
 
     }
 
-    function criarCartaoDuplaChaveamento(numero, vencedor) {
-      const dupla = duplasPadrao[numero - 1];
-      const cartao = document.createElement("div");
-      cartao.className = vencedor ? "bracket-team is-winner" : "bracket-team";
-      const cabecalho = document.createElement("div");
-      cabecalho.className = "bracket-team-name";
-      const numeroDupla = document.createElement("span");
-      numeroDupla.textContent = "DUPLA #" + String(numero).padStart(2, "0");
-      cabecalho.append(numeroDupla);
-      if (vencedor) {
-        const selo = document.createElement("span");
-        selo.className = "bracket-winner-tag";
-        selo.textContent = "VENCEDOR";
-        cabecalho.append(selo);
-      }
-      const jogadores = document.createElement("div");
-      jogadores.className = "bracket-players";
-      [dupla.jogador1, dupla.jogador2].forEach(jogador => {
-        const linha = document.createElement("div");
-        linha.className = "bracket-player";
-        linha.append(criarAvatar(jogador.nome || "Jogador", jogador.foto));
-        const nome = document.createElement("span");
-        nome.className = "bracket-player-name";
-        nome.textContent = jogador.nome || "A definir";
-        linha.append(nome);
-        jogadores.append(linha);
-      });
-      cartao.append(cabecalho, jogadores);
-      return cartao;
-    }
-
-    function renderizarChaveamento() {
-      const grade = document.getElementById("bracket-board");
-      if (!grade) return;
-      grade.replaceChildren();
-      jogosChaveamento.forEach((jogo, indice) => {
-        const partida = document.createElement("article");
-        partida.className = "bracket-game";
-        const topo = document.createElement("div");
-        topo.className = "bracket-game-top";
-        const rodada = document.createElement("span");
-        rodada.textContent = "Confronto " + String(indice + 1).padStart(2, "0");
-        const estado = document.createElement("span");
-        estado.className = "bracket-status";
-        estado.textContent = jogo.placar || jogo.status || "Aguardando resultado";
-        topo.append(rodada, estado);
-        const equipe1 = criarCartaoDuplaChaveamento(jogo.dupla1, jogo.vencedor === jogo.dupla1);
-        const vs = document.createElement("div");
-        vs.className = "bracket-vs";
-        vs.textContent = "VS";
-        const equipe2 = criarCartaoDuplaChaveamento(jogo.dupla2, jogo.vencedor === jogo.dupla2);
-        partida.append(topo, equipe1, vs, equipe2);
-        grade.append(partida);
-      });
-    }
     function mostrarAba(nomeAba) {
       document.querySelectorAll(".view").forEach(view => {
         view.hidden = view.id !== "view-" + nomeAba;
@@ -964,8 +881,6 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
     atualizarResumo();
     renderPlayers();
     atualizarAgendaPvp();
-    renderizarChaveamento();
-
     const abaInicial = window.location.hash.slice(1);
     if (document.getElementById("view-" + abaInicial)) {
       mostrarAba(abaInicial);
