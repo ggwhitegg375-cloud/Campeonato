@@ -183,6 +183,10 @@
     @keyframes winnerGlow { 0%,100% { box-shadow: 0 0 12px rgba(255,200,61,.24), inset 0 0 12px rgba(255,200,61,.04); } 50% { box-shadow: 0 0 32px rgba(255,200,61,.62), inset 0 0 22px rgba(255,200,61,.12); } }
     @keyframes winnerShine { 0%,55% { left: -45%; } 100% { left: 130%; } }
     .bronze-badge { display: inline-flex; align-items: center; gap: 7px; margin: 0 0 14px; padding: 9px 15px; border: 1px solid rgba(239,177,112,.82); border-radius: 999px; color: #fff0dc; background: linear-gradient(110deg,#6d3518,#cd7f32,#f3c28d,#9e5124); background-size: 220% 100%; box-shadow: 0 0 20px rgba(205,127,50,.42), inset 0 1px rgba(255,255,255,.3); text-transform: uppercase; font-size: 12px; font-weight: 950; letter-spacing: .08em; animation: bronzeShine 3s ease-in-out infinite; }
+    .final-prize-banner { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin: 0 0 16px; }
+    .final-prize-item { display: flex; align-items: center; gap: 10px; padding: 13px 15px; border: 1px solid rgba(255,224,119,.48); border-radius: 15px; color: #fff2c2; background: linear-gradient(120deg,rgba(255,200,61,.18),rgba(10,20,44,.88)); box-shadow: 0 0 18px rgba(255,200,61,.12); font-weight: 850; }
+    .final-prize-item strong { display: block; color: #ffe477; font-size: 20px; }
+    .robux-icon { width: 28px; height: 28px; object-fit: contain; flex: 0 0 28px; }
     .match-team.is-bronze { position: relative; overflow: hidden; border: 2px solid #cd7f32; background: linear-gradient(145deg,rgba(205,127,50,.2),rgba(5,11,26,.9) 68%); box-shadow: 0 0 24px rgba(205,127,50,.26), inset 0 0 18px rgba(205,127,50,.08); }
     .match-team.is-bronze::after { content: ""; position: absolute; inset: -60% auto -60% -45%; width: 35%; background: linear-gradient(90deg,transparent,rgba(255,231,205,.24),transparent); transform: rotate(20deg); animation: winnerShine 3.6s ease-in-out infinite; pointer-events: none; }
     @keyframes bronzeShine { 0%,100% { background-position: 0% 50%; box-shadow: 0 0 16px rgba(205,127,50,.28), inset 0 1px rgba(255,255,255,.2); } 50% { background-position: 100% 50%; box-shadow: 0 0 30px rgba(205,127,50,.62), inset 0 1px rgba(255,255,255,.42); } }
@@ -590,12 +594,13 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
       { data: "2026-11-16", horario: "20:00", dupla1: 15, dupla2: 10, bounty1: ["30M", "20M"], bounty2: ["10.4M", "6.4M"],  wo: true, vencedorWO: 15, vencedor: 15 },
       // Final/novo confronto: a Dupla #02 aguarda a vencedora de amanhã.
       { data: "2026-11-20", horario: "19:00", dupla1: 11, dupla2: 15, bounty1: ["28M", "18M"], bounty2: ["30M", "20M"], vencedor: 11, placar: "3 a 1" },
-      { data: "2026-11-22", horario: "23:10", dupla1: 2, dupla2: 14, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"] },
+      { data: "2026-11-22", horario: "23:10", dupla1: 2, dupla2: 14, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"], vencedor: 14, placar: "3 a 2" },
       { data: "2026-11-18", horario: "21:50", dupla1: 17, dupla2: 4, bounty1: ["30M", "30M"], bounty2: ["30M", "2.5M"], vencedor: 17, placar: "3 a 0" },
       { data: "2026-11-17", horario: "17:00", dupla1: 10, dupla2: 6, bounty1: ["10.4M", "6.4M"], bounty2: ["4.5M", "10M"], vencedor: 10, placar: "3 a 1" },
       { data: "2026-11-19", horario: "21:30", dupla1: 10, dupla2: 17, bounty1: ["10.4M", "6.4M"], bounty2: ["30M", "30M"], vencedor: 17 },
-      { data: "2026-11-21", horario: "16:00", dupla1: 17, dupla2: 11, bounty1: ["30M", "30M"], bounty2: ["28M", "18M"], vencedor: 17, placar: "3 a 0", disputaTerceiroLugar: true, terceiroLugar: 11 },
-      { data: "", horario: "", dupla1: 11, bounty1: ["28M", "18M"], adversarioTexto: "Adversário a definir", disputaTerceiroLugar: true, terceiroLugar: 11 },
+      { data: "2026-11-21", horario: "16:00", dupla1: 17, dupla2: 11, bounty1: ["30M", "30M"], bounty2: ["28M", "18M"], vencedor: 17, placar: "3 a 0" },
+      { data: "", horario: "", dupla1: 2, dupla2: 11, bounty1: ["30M", "30M"], bounty2: ["28M", "18M"], vencedor: 11, placar: "3 a 0", disputaTerceiroLugar: true, terceiroLugar: 11, premioPorJogador: 100 },
+      { data: "", horario: "", dupla1: 17, dupla2: 14, bounty1: ["30M", "30M"], bounty2: ["30M", "30M"], finalPvp: true, premioVencedor: 300, premioPerdedor: 125 },
     ];
     const limiteDuplas = 50;
     const duplas = duplasPadrao
@@ -836,15 +841,34 @@ O objetivo é garantir um campeonato organizado, competitivo e justo, no qual to
         topo.className = "agenda-match-meta";
         const bounty = document.createElement("span");
         bounty.className = "agenda-match-bounty";
-        bounty.textContent = "Bounty das duplas";
+        bounty.textContent = luta.finalPvp ? "GRANDE FINAL · PRÊMIOS" : "Bounty das duplas";
         topo.append(dataEl, bounty);
-        if (luta.disputaTerceiroLugar && luta.placar) {
+        if (luta.finalPvp) {
+          const premios = document.createElement("div");
+          premios.className = "final-prize-banner";
+          [["1º LUGAR · CADA JOGADOR", luta.premioVencedor], ["VICE · CADA JOGADOR", luta.premioPerdedor]].forEach(([rotulo, valor]) => {
+            const item = document.createElement("div");
+            item.className = "final-prize-item";
+            const icone = document.createElement("img");
+            icone.className = "robux-icon";
+            icone.src = "fotos/robux-logo.png";
+            icone.alt = "Robux";
+            const texto = document.createElement("span");
+            texto.textContent = rotulo;
+            const quantidade = document.createElement("strong");
+            quantidade.textContent = valor + " Robux";
+            texto.append(document.createElement("br"), quantidade);
+            item.append(icone, texto);
+            premios.append(item);
+          });
+          card.append(topo, horario, premios, times);
+        } else if (luta.disputaTerceiroLugar && luta.placar) {
           const placar = document.createElement("div");
           placar.className = "match-score";
           placar.textContent = "✦ PLACAR FINAL · " + luta.placar.toUpperCase() + " ✦";
           const bronze = document.createElement("div");
           bronze.className = "bronze-badge";
-          bronze.textContent = "🥉 DUPLA #" + String(luta.terceiroLugar).padStart(2, "0") + " NA DISPUTA PELO 3º LUGAR";
+          bronze.textContent = "🥉 3º LUGAR · DUPLA #" + String(luta.terceiroLugar).padStart(2, "0") + " · " + (luta.premioPorJogador || 100) + " ROBUX POR JOGADOR";
           card.append(topo, horario, placar, bronze, times);
         } else if (luta.disputaTerceiroLugar) {
           const bronze = document.createElement("div");
